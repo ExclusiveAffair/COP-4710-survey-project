@@ -1,10 +1,16 @@
 import React from 'react'; // import react
-import Login from './components/login';
+import Login from './components/Login';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
 
 class App extends React.Component {
   render() {
     return (
-      <Login></Login>
+      <div>
+        <Navbar />
+        <Home />
+      </div>
+      
     );
   }
 }
