@@ -1,17 +1,9 @@
 import React from "react";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Link
-} from "react-router-dom"
-import Home from "../pages/Home";
-import Login from "../pages/Login";
+import {Link} from "react-router-dom"
 
 export default function Navbar() {
     return (
-        <Router>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -21,14 +13,7 @@ export default function Navbar() {
                         <Link to='/login' class="nav-item nav-link">Login</Link>
                     </div>
                 </div>
-            </nav>
-            <Routes>
-                <Route path="/" element={<Home />}/>
-                <Route path="/login" element={<Login />}>
-                    <Login />
-                </Route>
-            </Routes>
-        </Router>
+        </nav>
     );
 }
 
