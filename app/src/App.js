@@ -1,5 +1,5 @@
 import React from 'react'; // import react
-import Login from './components/Login';
+import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 
@@ -10,7 +10,6 @@ class App extends React.Component {
         <Navbar />
         <Home />
       </div>
-      
     );
   }
 }

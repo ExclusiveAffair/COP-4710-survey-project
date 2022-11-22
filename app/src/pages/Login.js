@@ -1,6 +1,6 @@
 import React from "react";
 
-const Login = () => {
+export default function Login() {
     return (
         <div style={{margin: "auto", width: "25%"}}>
             <h1>Login</h1>
@@ -17,5 +17,3 @@ const Login = () => {
         </div>
     );
 };
-
-export default Login;
