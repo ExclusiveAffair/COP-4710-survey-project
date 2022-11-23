@@ -9,7 +9,7 @@ export default function Navbar() {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <Link to='/' class="nav-item nav-link active">Home <span class="sr-only">(current)</span></Link>
+                        <Link to='/' class="nav-item nav-link active">Home<span class="sr-only">(current)</span></Link>
                         <Link to='/login' class="nav-item nav-link">Login</Link>
                     </div>
                 </div>
