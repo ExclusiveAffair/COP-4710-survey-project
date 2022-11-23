@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 
 export default function Login() {
     return (
@@ -14,7 +14,7 @@ export default function Login() {
                     <input type="password" defaultValue=""/><br /><br />
                 </form>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <button type="button" class="btn btn-primary" style={{width: "50%"}}>Login</button>
+                    <button type="button" class="btn btn-primary" style={{width: "50%", margin: "0px 20px"}}>Login</button>
                     <button type="button" class="btn btn-primary" style={{width: "50%"}}>Register</button>
                 </div>
             </div>
