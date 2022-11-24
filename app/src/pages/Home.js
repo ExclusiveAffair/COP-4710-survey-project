@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import { useState } from "react";
 import SurveyList from "../components/SurveyList";
 
@@ -51,8 +50,6 @@ export default function Home() {
 
     return (
         <div>
-            <Navbar/>
-            <br/>
             <h1>Homepage</h1>
             <SurveyList surveys={surveys} handleDelete={ handleDelete }/>
         </div>

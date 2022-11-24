@@ -1,10 +1,8 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 
 export default function Login() {
     return (
         <div>
-            <Navbar />
             <div style={{margin: "auto", width: "25%"}}>
                 <h1>Login</h1>
                 <form action="">
