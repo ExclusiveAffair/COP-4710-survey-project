@@ -3,6 +3,8 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Create from "./pages/Create";
+import SurveyReport from './components/SurveyReport';
 
 function App() {
   return (
@@ -11,8 +13,10 @@ function App() {
         <Navbar/>
         <div className="content">
           <Routes>
-              <Route path="/" element={<Home/>}/>
-              <Route path ="login" element={<Login/>}/>
+              <Route exact path="/" element={<Home/>}/>
+              <Route exact path="/login" element={<Login/>}/>
+              <Route exact path="/create" element={<Create/>} />
+              <Route path="/surveys/:id" element={<SurveyReport/>} />
           </Routes>
         </div>
       </div>

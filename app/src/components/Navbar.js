@@ -11,6 +11,7 @@ export default function Navbar() {
                     <div className="navbar-nav">
                         <Link to='/' className="nav-item nav-link">Home<span className="sr-only">(current)</span></Link>
                         <Link to='/login' className="nav-item nav-link">Login</Link>
+                        <Link to='/create' className="nav-item nav-link">Create</Link>
                     </div>
                 </div>
         </nav>

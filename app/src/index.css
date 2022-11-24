@@ -25,3 +25,6 @@
     color: #f1356d;
     margin-bottom: 8px;
   }
+  .survey-preview a {
+    text-decoration: none;
+  }
