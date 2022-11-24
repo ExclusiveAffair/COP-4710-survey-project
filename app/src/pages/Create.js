@@ -9,6 +9,7 @@ const Create = () => {
     const [endDate, setEndDate] = useState(new Date());
     const [questions, setQuestions] = useState([]);
 
+    // TODO: do something with this survey data we have received.
     const handleSubmit = (e) => {
         e.preventDefault();
         const survey = { title, description, participants, startDate, endDate, questions };
