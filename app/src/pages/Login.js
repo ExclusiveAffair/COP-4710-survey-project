@@ -14,8 +14,8 @@ export default function Login() {
                     <input type="password" defaultValue=""/><br /><br />
                 </form>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <button type="button" class="btn btn-primary" style={{width: "50%", margin: "0px 20px"}}>Login</button>
-                    <button type="button" class="btn btn-primary" style={{width: "50%"}}>Register</button>
+                    <button type="button" className="btn btn-primary" style={{width: "50%", margin: "0px 20px", backgroundColor: "#f1356d"}}>Login</button>
+                    <button type="button" className="btn btn-primary" style={{width: "50%", backgroundColor: "#f1356d"}}>Register</button>
                 </div>
             </div>
         </div> 
