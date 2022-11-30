@@ -5,15 +5,34 @@ import "../StyleSheet/Login.css"
 import Form from 'react-bootstrap/Form'
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button"
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    // TODO: fill in this method
-    const handleLogin = () => {
-
+    const handleLogin = (e) => {
+        e.preventDefault();
+        console.log(email);
+        console.log(password);
+        console.log('checking');
+        axios.get(`http://localhost:8888/phpreact/insert.php/${email}`)
+        .then((response) => {
+            console.log(response);
+            if (Object.keys(response.data).length === 0) {
+                // user is not in the database
+            }
+            else if (password !== response.data.password) {
+                // user is in the database but the password is wrong
+            }
+            else {
+                // user may be logged in
+                navigate('/home');
+            }
+        });
     }
+    
     return (
         <div className="parent">
             <Container className="child">
@@ -27,7 +46,7 @@ export default function Login() {
                         <Form.Control 
                             type="email"
                             placeholder="name@example.com"
-                            ref={(c)=> setEmail(c)}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </FloatingLabel>
 
@@ -38,7 +57,7 @@ export default function Login() {
                         <Form.Control
                             type="password"
                             placeholder="Password"
-                            ref={(c) => setPassword(c)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </FloatingLabel>
                     <Button
