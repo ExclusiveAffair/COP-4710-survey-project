@@ -5,7 +5,7 @@ import {BrowserRouter, Routes, Route } from "react-router-dom";
 import Create from "./pages/Create";
 import SurveyReport from './components/SurveyReport';
 
-function App(){
+function App() {
   return(
     <BrowserRouter>
       <Routes>
