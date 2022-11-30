@@ -1,23 +1,56 @@
-import React from "react";
-import Navbar from "../components/navbar";
+import React, {useState} from "react";
+import Container from 'react-bootstrap/Container'
+import "../StyleSheet/Login.css"
+import Form from 'react-bootstrap/Form'
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Button from "react-bootstrap/Button"
+
+const handleSubmit = async (event) => {
+    event.preventDefault();
+};
 
 export default function Login() {
+
+    var [email, setEmail] = useState("");
+    var [password, setPassword] = useState("");
+
     return (
-        <div>
-            <Navbar />
-            <div style={{margin: "auto", width: "25%"}}>
-                <h1>Login</h1>
-                <form action="">
-                    <label htmlFor="username">Username: </label>
-                    <input type="text" defaultValue=""/><br /><br />
-                    <label htmlFor="password">Password: </label>
-                    <input type="password" defaultValue=""/><br /><br />
-                </form>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <button style={{width: "50%"}}>Login</button>
-                    <button style={{width: "50%"}}>Register</button>
-                </div>
-            </div>
-        </div>
+           <div className="parent">
+                <Container className="child">
+                    <h1 className="text-center">Login</h1>
+                    <Form onSubmit={handleSubmit}>
+                        <FloatingLabel
+                            controlId="floatingInput"
+                            label="Email address"
+                            className="mb-3"
+                        >
+                            <Form.Control 
+                                type="email"
+                                placeholder="name@example.com"
+                                ref={(c)=> setEmail(c)}
+                            />
+                        </FloatingLabel>
+
+                        <FloatingLabel
+                            controlId="floatingPassword"
+                            label="Password"
+                        >
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                ref={(c) => setPassword(c)}
+                            />
+                        </FloatingLabel>
+
+                        <Button
+                            type="submit"
+                            onClick={handleSubmit}
+                            style={{ marginTop: "1em" }}
+                        >
+                            Submit
+                        </Button>
+                    </Form>
+                </Container>
+           </div>    
     );
 };
