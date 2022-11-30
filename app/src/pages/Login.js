@@ -22,13 +22,15 @@ export default function Login() {
             console.log(response);
             if (Object.keys(response.data).length === 0) {
                 // user is not in the database
+                navigate('/home'); // for testing purposes only
             }
             else if (password !== response.data.password) {
                 // user is in the database but the password is wrong
+                navigate('/home'); // for testing purposes only
             }
             else {
                 // user may be logged in
-                navigate('/home');
+                navigate('/home'); // this is expected behavior
             }
         });
     }

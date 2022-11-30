@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DatePicker from 'react-date-picker'
+import '../StyleSheet/Create.css'
 
 const Create = () => {
     const [title, setTitle] = useState('');
@@ -46,7 +47,8 @@ const Create = () => {
     };
     return (
         <div className="create">
-            <h2> Create a new survey </h2>
+            <h1 className='title'>New Survey</h1>
+            <p className='subHeading'>Please provide the information requested below.</p>
             <form onSubmit={ handleSubmit }>
                 <label>Survey title:</label>
                 <input 
@@ -77,7 +79,6 @@ const Create = () => {
                     value={ endDate }
                     onChange={(date) => setEndDate(date)}
                 />
-                <br />
                 <div className="question-form-list">
                     {questions.map(question => (
                     <div className="question-fill" key={question.id} >
@@ -97,8 +98,11 @@ const Create = () => {
                     </div>
                     ))}
                 </div>
-                <button onClick={addQuestion}>Add question</button>
-                { questions.length > 0 && <button onClick={handleSubmit}>Create survey</button> }
+                <br />
+                <span>
+                    <button onClick={addQuestion}>Add question</button>
+                    { questions.length > 0 && <button onClick={handleSubmit}>Create survey</button> }
+                </span>
             </form>
         </div>
     );

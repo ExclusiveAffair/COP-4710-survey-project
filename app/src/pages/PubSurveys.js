@@ -5,10 +5,12 @@ import Button from 'react-bootstrap/Button'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import '../StyleSheet/PubSurveys.css'
+import { useNavigate } from "react-router-dom";
 
 export default function PublishedSurveys(){
+    const navigate = useNavigate();
 
-    let SurveyContainer = () =>{
+    let SurveyContainer = () => {
         var surveyArray = surveyInfo["Surveys"]
 
         console.log(surveyArray)
@@ -38,7 +40,7 @@ export default function PublishedSurveys(){
             <p className='subHeading'>Surveys you have created will show up here.</p>
             <SurveyContainer/>
             <div className='newSurvey'>
-                <Button>New Survey</Button>
+                <Button onClick={() => navigate('/create') }>New Survey</Button>
             </div>
         </Container>
     )

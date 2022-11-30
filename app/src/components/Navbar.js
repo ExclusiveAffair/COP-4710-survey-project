@@ -1,7 +1,10 @@
 import React from "react";
-import {Link} from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 export default function Navbar() {
+    const location = useLocation();
+    if (location.pathname === '/') return null;
+    
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,9 +12,8 @@ export default function Navbar() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
-                        <Link to='/' className="nav-item nav-link">Home<span className="sr-only">(current)</span></Link>
-                        <Link to='/login' className="nav-item nav-link">Login</Link>
-                        <Link to='/create' className="nav-item nav-link">Create</Link>
+                        <Link to='/home' className="nav-item nav-link">Home<span className="sr-only">(current)</span></Link>
+                        <Link to='/invitations' className="nav-item nav-link">Invitations</Link>
                     </div>
                 </div>
         </nav>
