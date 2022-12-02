@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect, useContext } from 'react';
 import Container from 'react-bootstrap/Container'
-import surveyInfo from '../surveyInfo/info.json'
 import Button from 'react-bootstrap/Button'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import CloseIcon from '@mui/icons-material/Close';

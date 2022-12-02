@@ -1,0 +1,28 @@
+
+.containers{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.surveys{
+    margin: 0.5em;
+    padding: 0.25em;
+    width: 50vh;
+    background: #BEBCBC;
+    display: flex;
+    justify-content: space-between;
+}
+
+.subHeading{
+    font-size: 1.2rem;
+}
+
+.takesurvey{
+    display: flex;
+}
+
+.takesurvey:hover{
+    cursor: pointer;
+    color: blue;
+}

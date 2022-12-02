@@ -29,13 +29,15 @@ export default function Login() {
                 // user may be logged in
                 navigate('/home'); // this is expected behavior
 
-                // set existing surveys
+                // set existing published and invited surveys
                 axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
                 .then((response) => {
-                    const existing_surveys = JSON.parse(response.data.published_surveys);
+                    const existing_published_surveys = JSON.parse(response.data.published_surveys);
+                    const existing_invited_surveys = JSON.parse(response.data.invited_surveys);
                     setUser(user => ({
                         ...user,
-                        published_surveys: JSON.stringify(existing_surveys)
+                        published_surveys: JSON.stringify(existing_published_surveys),
+                        invited_surveys: JSON.stringify(existing_invited_surveys)
                     }));
                 });
             }
@@ -47,7 +49,8 @@ export default function Login() {
         const senddata = {
             email: user.email,
             password: user.password,
-            published_surveys: user.published_surveys
+            published_surveys: user.published_surveys,
+            invited_surveys: user.invited_surveys
         };
         console.log(senddata);
         axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
@@ -86,7 +89,8 @@ export default function Login() {
                                 setUser(user => ({
                                     ...user,
                                     email: e.target.value,
-                                    published_surveys: '[]'
+                                    published_surveys: '[]',
+                                    invited_surveys: '[]'
                                 }));
                             }}
                         />
@@ -103,7 +107,8 @@ export default function Login() {
                                 setUser(user => ({
                                     ...user,
                                     password: e.target.value,
-                                    published_surveys: '[]'
+                                    published_surveys: '[]',
+                                    invited_surveys: '[]'
                                 }));
                             }}
                         />

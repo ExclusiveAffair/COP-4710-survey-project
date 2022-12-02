@@ -6,6 +6,7 @@ import Create from "./pages/Create";
 import SurveyReport from './components/SurveyReport';
 import Navbar from "./components/Navbar";
 import { UserContext } from './components/UserContext';
+import Invitations from './pages/InvitedSurveys';
 
 function App() {
   const [user, setUser] = useState([]);
@@ -20,6 +21,7 @@ function App() {
               <Route exact path="/" element={<Login/>}/>
               <Route exact path="/home" element={<Home/>}/>
               <Route exact path="/create" element={<Create/>} />
+              <Route exact path="/invitations" element={<Invitations/>} />
               <Route path="/surveys/:id" element={<SurveyReport/>} />
           </Routes>
           

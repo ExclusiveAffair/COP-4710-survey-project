@@ -24,26 +24,44 @@ const Create = () => {
         const endDateString = endDate.toUTCString();
 
         const survey = { title, description, participants, startDateString, endDateString, questions };
-        console.log(JSON.stringify(survey));
 
         axios.get(`http://localhost:8888/phpreact/insert.php/${email}`)
         .then((response) => {
-            console.log(published_surveys);
             const existing_surveys = JSON.parse(response.data.published_surveys);
             existing_surveys.push(survey);
-            console.log(existing_surveys);
-            const senddata = {
-                email: email,
-                published_surveys: JSON.stringify(existing_surveys)
-            }
-            axios.put(`http://localhost:8888/phpreact/insert.php/${email}/edit`, senddata)
-            .then((response) => {
-                console.log(response);
-            });
+
             setUser(user => ({
                 ...user,
                 published_surveys: JSON.stringify(existing_surveys)
             }));
+
+            const senddata = {
+                email: email,
+                published_surveys: JSON.stringify(existing_surveys)
+            }
+            axios.put(`http://localhost:8888/phpreact/insert.php/${email}/editPublished`, senddata);
+        });
+
+        // send the survey to the list of invitees.
+        const participantsArray = participants.split(",");
+        participantsArray.forEach((participant) => {
+            participant = participant.trim();
+            axios.get(`http://localhost:8888/phpreact/insert.php/${participant}`)
+            .then((response) => {
+                if (Object.keys(response.data).length !== 0) {
+                    // this user exists. give him the survey
+                    const invited_surveys = JSON.parse(response.data.invited_surveys);
+                    invited_surveys.push(survey);
+                    const senddata = {
+                        email: participant,
+                        invited_surveys: JSON.stringify(invited_surveys)
+                    }
+                    return axios.put(`http://localhost:8888/phpreact/insert.php/${participant}/editInvited`, senddata);
+                }
+            })
+            .then((response) => {
+                console.log(response);
+            });
         });
 
         navigate('/home');
