@@ -55,10 +55,11 @@ switch($method) {
 
     case 'POST':
         $user = json_decode( file_get_contents('php://input') );
-        $sql = "INSERT INTO registered_users(email, password) VALUES(:email, :password)";
+        $sql = "INSERT INTO registered_users(email, password, published_surveys) VALUES(:email, :password, :published_surveys)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':email', $user->email);
         $stmt->bindParam(':password', $user->password);
+        $stmt->bindParam(':published_surveys', $user->published_surveys);
 
         if ($stmt->execute()) {
             echo json_encode([
@@ -71,5 +72,20 @@ switch($method) {
                 'message' => 'Failed to create record.'
             ]);
         }
+        break;
+
+    case "PUT":
+        $user = json_decode( file_get_contents('php://input') );
+        $sql = "UPDATE registered_users SET published_surveys = :published_surveys WHERE email = :email";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':published_surveys', $user->published_surveys);
+        $stmt->bindParam(':email', $user->email);
+
+        if($stmt->execute()) {
+            $response = ['status' => 1, 'message' => 'Record updated successfully.'];
+        } else {
+            $response = ['status' => 0, 'message' => 'Failed to update record.'];
+        }
+        echo json_encode($response);
         break;
 }

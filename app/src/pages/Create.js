@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import DatePicker from 'react-date-picker'
 import '../StyleSheet/Create.css'
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { UserContext } from '../components/UserContext';
 
 const Create = () => {
     const [title, setTitle] = useState('');
@@ -9,11 +12,41 @@ const Create = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [questions, setQuestions] = useState([]);
+    const navigate = useNavigate();
+    const {user, setUser} = useContext(UserContext);
 
     // TODO: do something with this survey data we have received.
     const handleSubmit = (e) => {
         e.preventDefault();
-        const survey = { title, description, participants, startDate, endDate, questions };
+
+        const {email, password, published_surveys} = user;
+        const startDateString = startDate.toUTCString();
+        const endDateString = endDate.toUTCString();
+
+        const survey = { title, description, participants, startDateString, endDateString, questions };
+        console.log(JSON.stringify(survey));
+
+        axios.get(`http://localhost:8888/phpreact/insert.php/${email}`)
+        .then((response) => {
+            console.log(published_surveys);
+            const existing_surveys = JSON.parse(response.data.published_surveys);
+            existing_surveys.push(survey);
+            console.log(existing_surveys);
+            const senddata = {
+                email: email,
+                published_surveys: JSON.stringify(existing_surveys)
+            }
+            axios.put(`http://localhost:8888/phpreact/insert.php/${email}/edit`, senddata)
+            .then((response) => {
+                console.log(response);
+            });
+            setUser(user => ({
+                ...user,
+                published_surveys: JSON.stringify(existing_surveys)
+            }));
+        });
+
+        navigate('/home');
     };
     const addQuestion = () => {
         setQuestions(questions => [...questions, {

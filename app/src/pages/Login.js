@@ -1,40 +1,74 @@
 import axios from 'axios';
-import React, {useState} from "react";
+import React, { useState, useContext } from "react";
 import Container from 'react-bootstrap/Container'
 import "../StyleSheet/Login.css"
 import Form from 'react-bootstrap/Form'
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom";
+import { UserContext } from '../components/UserContext';
 
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const {user, setUser} = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log(email);
-        console.log(password);
-        console.log('checking');
-        axios.get(`http://localhost:8888/phpreact/insert.php/${email}`)
+        axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
         .then((response) => {
             console.log(response);
             if (Object.keys(response.data).length === 0) {
                 // user is not in the database
                 navigate('/home'); // for testing purposes only
             }
-            else if (password !== response.data.password) {
+            else if (user.password !== response.data.password) {
                 // user is in the database but the password is wrong
                 navigate('/home'); // for testing purposes only
             }
             else {
                 // user may be logged in
                 navigate('/home'); // this is expected behavior
+
+                // set existing surveys
+                axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
+                .then((response) => {
+                    const existing_surveys = JSON.parse(response.data.published_surveys);
+                    setUser(user => ({
+                        ...user,
+                        published_surveys: JSON.stringify(existing_surveys)
+                    }));
+                });
             }
         });
     }
-    
+    const handleRegister = (e) => {
+        e.preventDefault();
+
+        const senddata = {
+            email: user.email,
+            password: user.password,
+            published_surveys: user.published_surveys
+        };
+        console.log(senddata);
+        axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
+        .then((response) => {
+            console.log(response);
+            if (Object.keys(response.data).length !== 0) {
+                // user with this email already exists
+                console.log("noo we already exist");
+            }
+            else {
+                // user may be registered
+                console.log("we good to register");
+                axios.post('http://localhost:8888/phpreact/insert.php', senddata)
+                .then((response) => {
+                    console.log(response);
+                });
+                navigate('/home'); // this is expected behavior
+            }
+        });
+    }
+
     return (
         <div className="parent">
             <Container className="child">
@@ -48,7 +82,13 @@ export default function Login() {
                         <Form.Control 
                             type="email"
                             placeholder="name@example.com"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setUser(user => ({
+                                    ...user,
+                                    email: e.target.value,
+                                    published_surveys: '[]'
+                                }));
+                            }}
                         />
                     </FloatingLabel>
 
@@ -59,7 +99,13 @@ export default function Login() {
                         <Form.Control
                             type="password"
                             placeholder="Password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setUser(user => ({
+                                    ...user,
+                                    password: e.target.value,
+                                    published_surveys: '[]'
+                                }));
+                            }}
                         />
                     </FloatingLabel>
                     <Button
@@ -68,6 +114,13 @@ export default function Login() {
                         style={{ marginTop: "1em" }}
                     >
                         Log in
+                    </Button>
+                    <Button
+                        type="submit"
+                        onClick={handleRegister}
+                        style={{ marginTop: "1em" }}
+                    >
+                        Register
                     </Button>
                 </Form>
             </Container>
