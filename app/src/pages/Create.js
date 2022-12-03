@@ -22,8 +22,9 @@ const Create = () => {
         const startDateString = startDate.toUTCString();
         const endDateString = endDate.toUTCString();
         const questionString = JSON.stringify(questions);
+        const responseString = JSON.stringify([]);
 
-        var survey = { title, description, participants, startDateString, endDateString, questionString };
+        var survey = { title, description, participants, startDateString, endDateString, questionString, responseString };
 
         // add survey to survey database.
         const surveyID = await axios.post('http://localhost:8888/phpreact/insertSurveys.php', survey).then((response) => response.data.id);

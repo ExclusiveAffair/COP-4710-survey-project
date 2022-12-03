@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import '../StyleSheet/TakeSurvey.css'
+import axios from 'axios';
 
 export default function TakeSurveyForm() {
     const navigate = useNavigate();
@@ -25,9 +26,21 @@ export default function TakeSurveyForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        // TODO: send these results to the database.
-        console.log("final responses!");
-        console.log(responses);
+        // send these results to the database.
+
+        axios.get(`http://localhost:8888/phpreact/insertSurveys.php/${id}`)
+        .then((response) => {
+            const existingResponses = JSON.parse(response.data.responses);
+            existingResponses.push(responses);
+
+            const senddata = {
+                responses: JSON.stringify(existingResponses)
+            }
+
+            return axios.put(`http://localhost:8888/phpreact/insertSurveys.php/${id}/editResponses`, senddata);
+        });
+        
+        navigate('/invitations');
     };
 
     const updateResponseValue = (e, questionID) => {

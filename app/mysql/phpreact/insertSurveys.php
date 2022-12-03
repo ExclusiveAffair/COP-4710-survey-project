@@ -61,7 +61,7 @@ switch($method) {
         $result->execute();
         $test = $result->fetch(PDO::FETCH_ASSOC);
 
-        $sql = "INSERT INTO created_surveys(id, title, description, participants, startDate, endDate, questions) VALUES(:id, :title, :description, :participants, :startDate, :endDate, :questions)";
+        $sql = "INSERT INTO created_surveys(id, title, description, participants, startDate, endDate, questions, responses) VALUES(:id, :title, :description, :participants, :startDate, :endDate, :questions, :responses)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':id', $test['max_id'] + 1, PDO::PARAM_INT);
         $stmt->bindParam(':title', $user->title);
@@ -70,6 +70,7 @@ switch($method) {
         $stmt->bindParam(':startDate', $user->startDateString);
         $stmt->bindParam(':endDate', $user->endDateString);
         $stmt->bindParam(':questions', $user->questionString);
+        $stmt->bindParam(':responses', $user->responseString);
 
         if ($stmt->execute()) {
             echo json_encode([
@@ -83,5 +84,25 @@ switch($method) {
                 'message' => 'Failed to create record.'
             ]);
         }
+        break;
+
+    case "PUT":
+        $user = json_decode( file_get_contents('php://input') );
+        $path = explode('/', $_SERVER['REQUEST_URI']);
+        echo $path[4];
+        if(isset($path[4]) && $path[4] == 'editResponses') {
+            $sql = "UPDATE created_surveys SET responses = :responses WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':responses', $user->responses);
+            $stmt->bindParam(':id', $path[3]);
+    
+            if($stmt->execute()) {
+                $response = ['status' => 1, 'message' => 'Record updated successfully.'];
+            } else {
+                $response = ['status' => 0, 'message' => 'Failed to update record.'];
+            }
+            echo json_encode($response);
+        }
+        
         break;
 }
