@@ -1,6 +1,6 @@
-/* create new survey form */
-.create {
-  max-width: 450px;
+/* take survey form */
+.takesurveycontainer {
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
 }
@@ -11,15 +11,15 @@
   text-align: left;
   display: block;
 }
-.create h2 {
+.takesurveycontainer h2 {
   font-size: 20px;
   color: rgb(107, 110, 117);
   margin-bottom: 30px;
 }
-.create input, .create textarea, .create select {
+.takesurveycontainer input, .create textarea, .create select {
   width: 100%;
 }
-.create button {
+.takesurveycontainer button {
   background: rgb(0, 123, 255);
   color: #ffffff;
   border: 0;

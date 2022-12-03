@@ -7,6 +7,7 @@ import SurveyReport from './components/SurveyReport';
 import Navbar from "./components/Navbar";
 import { UserContext } from './components/UserContext';
 import Invitations from './pages/InvitedSurveys';
+import TakeSurveyForm from './pages/TakeSurvey';
 
 function App() {
   const [user, setUser] = useState([]);
@@ -22,7 +23,8 @@ function App() {
               <Route exact path="/home" element={<Home/>}/>
               <Route exact path="/create" element={<Create/>} />
               <Route exact path="/invitations" element={<Invitations/>} />
-              <Route path="/surveys/:id" element={<SurveyReport/>} />
+              <Route path="/surveyreport/:id" element={<SurveyReport/>} />
+              <Route path="/takesurvey/:id" element={<TakeSurveyForm/>} />
           </Routes>
           
         </div>

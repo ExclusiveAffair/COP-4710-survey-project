@@ -2,14 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import Container from 'react-bootstrap/Container'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import '../StyleSheet/InvitedSurveys.css'
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from '../components/UserContext';
 
 export default function InvitedSurveys() {
+    const navigate = useNavigate();
     const {user, setUser} = useContext(UserContext);
 
-    const takeSurvey = (survey) => {
-        
+    const takeSurvey = (surveyID) => {
+        navigate(`/takesurvey/${surveyID}`);
     };
     const SurveyContainer = () => {
         if (user !== null) {
@@ -23,7 +24,7 @@ export default function InvitedSurveys() {
                                     <p key={survey.title} className='survey'>{survey.title}</p> 
                                 </div>
                                 <div className='takesurvey'>
-                                    <p>Take survey</p>
+                                    <p onClick={() => takeSurvey(survey.id)}>Take survey</p>
                                     <ArrowRightAltIcon/>
                                 </div>
                             </div> 
