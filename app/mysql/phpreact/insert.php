@@ -55,11 +55,12 @@ switch($method) {
 
     case 'POST':
         $user = json_decode( file_get_contents('php://input') );
-        $sql = "INSERT INTO registered_users(email, password, published_surveys) VALUES(:email, :password, :published_surveys)";
+        $sql = "INSERT INTO registered_users(email, password, published_surveys, invited_surveys) VALUES(:email, :password, :published_surveys, :invited_surveys)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':email', $user->email);
         $stmt->bindParam(':password', $user->password);
         $stmt->bindParam(':published_surveys', $user->published_surveys);
+        $stmt->bindParam(':invited_surveys', $user->invited_surveys);
 
         if ($stmt->execute()) {
             echo json_encode([
@@ -76,16 +77,34 @@ switch($method) {
 
     case "PUT":
         $user = json_decode( file_get_contents('php://input') );
-        $sql = "UPDATE registered_users SET published_surveys = :published_surveys WHERE email = :email";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':published_surveys', $user->published_surveys);
-        $stmt->bindParam(':email', $user->email);
-
-        if($stmt->execute()) {
-            $response = ['status' => 1, 'message' => 'Record updated successfully.'];
-        } else {
-            $response = ['status' => 0, 'message' => 'Failed to update record.'];
+        $path = explode('/', $_SERVER['REQUEST_URI']);
+        echo $path[4];
+        if(isset($path[4]) && $path[4] == 'editPublished') {
+            $sql = "UPDATE registered_users SET published_surveys = :published_surveys WHERE email = :email";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':published_surveys', $user->published_surveys);
+            $stmt->bindParam(':email', $user->email);
+    
+            if($stmt->execute()) {
+                $response = ['status' => 1, 'message' => 'Record updated successfully.'];
+            } else {
+                $response = ['status' => 0, 'message' => 'Failed to update record.'];
+            }
+            echo json_encode($response);
         }
-        echo json_encode($response);
+        else if (isset($path[4]) && $path[4] == 'editInvited') {
+            $sql = "UPDATE registered_users SET invited_surveys = :invited_surveys WHERE email = :email";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':invited_surveys', $user->invited_surveys);
+            $stmt->bindParam(':email', $user->email);
+    
+            if($stmt->execute()) {
+                $response = ['status' => 1, 'message' => 'Record updated successfully.'];
+            } else {
+                $response = ['status' => 0, 'message' => 'Failed to update record.'];
+            }
+            echo json_encode($response);
+        }
+        
         break;
 }

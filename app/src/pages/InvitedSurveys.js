@@ -8,9 +8,12 @@ import { UserContext } from '../components/UserContext';
 export default function InvitedSurveys() {
     const {user, setUser} = useContext(UserContext);
 
+    const takeSurvey = (survey) => {
+        
+    };
     const SurveyContainer = () => {
         if (user !== null) {
-            const {email, password, invited_surveys} = user;
+            const {email, password, published_surveys, invited_surveys} = user;
             return(
                 <>
                     {JSON.parse(invited_surveys).map((survey) =>(

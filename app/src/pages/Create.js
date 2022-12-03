@@ -15,29 +15,40 @@ const Create = () => {
     const navigate = useNavigate();
     const {user, setUser} = useContext(UserContext);
 
-    // TODO: do something with this survey data we have received.
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        const {email, password, published_surveys} = user;
+        const {email, password, published_surveys, invited_surveys} = user;
         const startDateString = startDate.toUTCString();
         const endDateString = endDate.toUTCString();
+        const questionString = JSON.stringify(questions);
 
-        const survey = { title, description, participants, startDateString, endDateString, questions };
+        var survey = { title, description, participants, startDateString, endDateString, questionString };
+
+        // add survey to survey database.
+        const surveyID = await axios.post('http://localhost:8888/phpreact/insertSurveys.php', survey).then((response) => response.data.id);
+        console.log(surveyID);
+        survey = {
+            id: surveyID,
+            ...survey
+        };
 
         axios.get(`http://localhost:8888/phpreact/insert.php/${email}`)
         .then((response) => {
-            const existing_surveys = JSON.parse(response.data.published_surveys);
-            existing_surveys.push(survey);
+            console.log(surveyID);
+            const published_surveyIDs = JSON.parse(response.data.published_surveys);
+            published_surveyIDs.push(surveyID);
 
             setUser(user => ({
                 ...user,
-                published_surveys: JSON.stringify(existing_surveys)
+                published_surveys: JSON.stringify([
+                    ...JSON.parse(published_surveys),
+                    survey
+                ])
             }));
-
             const senddata = {
                 email: email,
-                published_surveys: JSON.stringify(existing_surveys)
+                published_surveys: JSON.stringify(published_surveyIDs)
             }
             axios.put(`http://localhost:8888/phpreact/insert.php/${email}/editPublished`, senddata);
         });
@@ -50,11 +61,18 @@ const Create = () => {
             .then((response) => {
                 if (Object.keys(response.data).length !== 0) {
                     // this user exists. give him the survey
-                    const invited_surveys = JSON.parse(response.data.invited_surveys);
-                    invited_surveys.push(survey);
+                    const invited_surveyIDs = JSON.parse(response.data.invited_surveys);
+                    invited_surveyIDs.push(surveyID);
+                    setUser(user => ({
+                        ...user,
+                        invited_surveys: JSON.stringify([
+                            ...JSON.parse(invited_surveys),
+                            survey
+                        ])
+                    }));
                     const senddata = {
                         email: participant,
-                        invited_surveys: JSON.stringify(invited_surveys)
+                        invited_surveys: JSON.stringify(invited_surveyIDs)
                     }
                     return axios.put(`http://localhost:8888/phpreact/insert.php/${participant}/editInvited`, senddata);
                 }

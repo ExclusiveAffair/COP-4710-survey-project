@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import '../StyleSheet/PubSurveys.css'
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../components/UserContext';
+import { getTableContainerUtilityClass } from '@mui/material';
 
 export default function PublishedSurveys() {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function PublishedSurveys() {
 
     const SurveyContainer = () => {
         if (user !== null) {
-            const {email, password, published_surveys} = user;
+            const {email, password, published_surveys, invited_surveys} = user;
             return(
                 <>
                     {JSON.parse(published_surveys).map((survey) =>(

@@ -12,6 +12,13 @@ export default function Login() {
     const {user, setUser} = useContext(UserContext);
     const navigate = useNavigate();
 
+    const getPromise = (surveyIDs) => {
+        const promises = [];
+        surveyIDs.forEach((id) => {
+            promises.push(axios.get(`http://localhost:8888/phpreact/insertSurveys.php/${id}`));
+        });
+        return Promise.all(promises);
+    }
     const handleLogin = (e) => {
         e.preventDefault();
         axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
@@ -32,13 +39,23 @@ export default function Login() {
                 // set existing published and invited surveys
                 axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
                 .then((response) => {
-                    const existing_published_surveys = JSON.parse(response.data.published_surveys);
-                    const existing_invited_surveys = JSON.parse(response.data.invited_surveys);
-                    setUser(user => ({
-                        ...user,
-                        published_surveys: JSON.stringify(existing_published_surveys),
-                        invited_surveys: JSON.stringify(existing_invited_surveys)
-                    }));
+                    const published_surveyIDs = JSON.parse(response.data.published_surveys);
+                    const invited_surveyIDs = JSON.parse(response.data.invited_surveys);
+
+                    getPromise(published_surveyIDs).then((values) => {
+                        console.log("got published values"); 
+                        console.log(values);
+                        setUser(user => ({
+                            ...user,
+                            published_surveys: JSON.stringify(values.map((val) => (val.data)))
+                        }))
+                    });
+                    getPromise(invited_surveyIDs).then((values) => { 
+                        setUser(user => ({
+                            ...user,
+                            invited_surveys: JSON.stringify(values.map((val) => (val.data))),
+                        }))
+                    });
                 });
             }
         });
