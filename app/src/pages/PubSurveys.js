@@ -12,6 +12,9 @@ export default function PublishedSurveys() {
     const navigate = useNavigate();
     const {user, setUser} = useContext(UserContext);
 
+    const displaySurveyReport = (surveyID) => {
+        navigate(`/surveyreport/${surveyID}`);
+    };
     const SurveyContainer = () => {
         if (user !== null) {
             const {email, password, published_surveys, invited_surveys} = user;
@@ -24,7 +27,7 @@ export default function PublishedSurveys() {
                                     <p key={survey.title} className='survey'>{survey.title}</p> 
                                 </div>
                                 <div className='surveyreport'>
-                                    <p>View report</p>
+                                    <p onClick={() => displaySurveyReport(survey.id)}>Survey report</p>
                                     <ArrowRightAltIcon/>
                                 </div>
                             </div> 

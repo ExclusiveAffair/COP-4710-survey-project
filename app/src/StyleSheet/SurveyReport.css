@@ -1,0 +1,8 @@
+.reportHeader {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.showsurveyreport {
+    text-align: center;
+}

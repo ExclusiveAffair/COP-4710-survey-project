@@ -3,7 +3,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Create from "./pages/Create";
-import SurveyReport from './components/SurveyReport';
+import SurveyReport from './pages/SurveyReport';
 import Navbar from "./components/Navbar";
 import { UserContext } from './components/UserContext';
 import Invitations from './pages/InvitedSurveys';
