@@ -1,17 +1,43 @@
 
-.containers{
+.containers {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
 }
 
-.surveys{
+.surveybuttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 20%
+}
+
+.surveyreport {
+    display :inline;
+    background: #BEBCBC;
+    width: 50%;
+}
+
+.deletesurvey {
+    display: inline;
+    background: #BEBCBC;
+    width: 50%;
+}
+
+.surveys {
     margin: 0.5em;
     padding: 0.25em;
-    width: 50vh;
+    width: 100vh;
     background: #BEBCBC;
     display: flex;
     justify-content: space-between;
+}
+
+.survey {
+    margin: 0.25em;
+    padding: 0.25em;
 }
 
 .subHeading{
@@ -25,6 +51,11 @@
 .surveyreport:hover{
     cursor: pointer;
     color: blue;
+}
+
+.deletesurvey:hover{
+    cursor: pointer;
+    color: red;
 }
 
 .newSurvey{
