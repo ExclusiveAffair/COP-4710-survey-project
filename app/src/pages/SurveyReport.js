@@ -1,8 +1,11 @@
 import { useParams } from "react-router-dom";
 import { UserContext } from '../components/UserContext';
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import Container from 'react-bootstrap/Container'
 import '../StyleSheet/SurveyReport.css'
+import Button from 'react-bootstrap/Button'
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const SurveyReport = () => {
     const {user, setUser} = useContext(UserContext);
@@ -22,6 +25,7 @@ const SurveyReport = () => {
     const respondents = responseData.length;
     const surveyStartDate = new Date(activeSurvey.startDate);
     const surveyEndDate = new Date(activeSurvey.endDate);
+    const printRef = useRef();
 
     const getMean = (questionID) => {
         if (respondents == 0) return "N/A";
@@ -42,8 +46,24 @@ const SurveyReport = () => {
         });
         return (sum  * 1.0 / respondents).toFixed(2);
     }
+
+    const savePagePDF = async () => {
+        const element = printRef.current;
+        const canvas = await html2canvas(element);
+        const data = canvas.toDataURL('image/png');
+
+        const pdf = new jsPDF();
+        const imgProperties = pdf.getImageProperties(data);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight =
+        (imgProperties.height * pdfWidth) / imgProperties.width;
+
+        pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`Survey${id}Report.pdf`);
+    };
+
     return (
-        <Container fluid className='surveyreportcontainer'>
+        <Container fluid className='surveyreportcontainer' ref={printRef}>
             <div className='reportHeader'>
                 <h2 className='title'>{activeSurvey.title}</h2>
                 <p className='subHeading'><b>{activeSurvey.description}</b></p>
@@ -76,9 +96,13 @@ const SurveyReport = () => {
                         <br />
                     </div>
                 ))}
+                <span className='footer'>
+                    <Button onClick={window.print}>Print report</Button>
+                    <Button onClick={savePagePDF}>Save report</Button>
+                </span>
             </div>
         </Container>
     )
 }
- 
+
 export default SurveyReport;
