@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Container from 'react-bootstrap/Container'
 import "../StyleSheet/Login.css"
 import Form from 'react-bootstrap/Form'
@@ -7,10 +7,12 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../components/UserContext';
+import Modal from 'react-bootstrap/Modal';
 
 export default function Login() {
     const {user, setUser} = useContext(UserContext);
     const navigate = useNavigate();
+    const [showDialog, setShowDialog] = useState(false);
 
     const getPromise = (surveyIDs) => {
         const promises = [];
@@ -25,11 +27,16 @@ export default function Login() {
         .then((response) => {
             if (response.data === 'nothing found') {
                 // user is not in the database
-                navigate('/home'); // for testing purposes only
+                console.log(showDialog);
+                console.log("should be displaying the thing");
+                setShowDialog(true);
+                // navigate('/home'); // for testing purposes only
             }
             else if (user.password !== response.data.password) {
                 // user is in the database but the password is wrong
-                navigate('/home'); // for testing purposes only
+                // navigate('/home'); // for testing purposes only
+                console.log("should be displaying the thing2");
+                setShowDialog(true);
             }
             else {
                 // user may be logged in
@@ -79,8 +86,29 @@ export default function Login() {
         });
     }
 
+    const Dialog = ({ header, contents }) => {
+        const handleClose = () => setShowDialog(false);
+      
+        return (
+          <>
+            <Modal show={showDialog} onHide={() => setShowDialog(false)}>
+              <Modal.Header closeButton>
+                <Modal.Title>{header}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>{contents}</Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={() => setShowDialog(false)}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </>
+        );
+      }
+
     return (
         <div className="parent">
+            <Dialog header="Login failed" contents="Whoops! You have entered an invalid username or password." />
             <Container className="child">
                 <h1 className="text-center">Login</h1>
                 <Form>
