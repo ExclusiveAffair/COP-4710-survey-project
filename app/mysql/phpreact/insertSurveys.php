@@ -66,11 +66,11 @@ switch($method) {
         $stmt->bindValue(':id', $test['max_id'] + 1, PDO::PARAM_INT);
         $stmt->bindParam(':title', $user->title);
         $stmt->bindParam(':description', $user->description);
-        $stmt->bindParam(':participants', $user->participantsString);
-        $stmt->bindParam(':startDate', $user->startDateString);
-        $stmt->bindParam(':endDate', $user->endDateString);
-        $stmt->bindParam(':questions', $user->questionString);
-        $stmt->bindParam(':responses', $user->responseString);
+        $stmt->bindParam(':participants', $user->participants);
+        $stmt->bindParam(':startDate', $user->startDate);
+        $stmt->bindParam(':endDate', $user->endDate);
+        $stmt->bindParam(':questions', $user->questions);
+        $stmt->bindParam(':responses', $user->responses);
 
         if ($stmt->execute()) {
             echo json_encode([

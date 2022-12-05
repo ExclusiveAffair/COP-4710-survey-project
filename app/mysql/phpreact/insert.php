@@ -56,12 +56,13 @@ switch($method) {
 
     case 'POST':
         $user = json_decode( file_get_contents('php://input') );
-        $sql = "INSERT INTO registered_users(email, password, published_surveys, invited_surveys) VALUES(:email, :password, :published_surveys, :invited_surveys)";
+        $sql = "INSERT INTO registered_users(email, password, published_surveys, invited_surveys, taken_surveys) VALUES(:email, :password, :published_surveys, :invited_surveys, :taken_surveys)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':email', $user->email);
         $stmt->bindParam(':password', $user->password);
         $stmt->bindParam(':published_surveys', $user->published_surveys);
         $stmt->bindParam(':invited_surveys', $user->invited_surveys);
+        $stmt->bindParam(':taken_surveys', $user->taken_surveys);
 
         if ($stmt->execute()) {
             echo json_encode([

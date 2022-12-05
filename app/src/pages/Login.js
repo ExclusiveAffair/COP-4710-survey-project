@@ -67,7 +67,8 @@ export default function Login() {
             email: user.email,
             password: user.password,
             published_surveys: user.published_surveys,
-            invited_surveys: user.invited_surveys
+            invited_surveys: user.invited_surveys,
+            taken_surveys: user.taken_surveys
         };
         axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
         .then((response) => {
@@ -77,7 +78,8 @@ export default function Login() {
             }
             else {
                 // user may be registered
-                axios.post('http://localhost:8888/phpreact/insert.php', senddata);
+                axios.post('http://localhost:8888/phpreact/insert.php', senddata)
+                .then((response) => console.log(response));
                 navigate('/home');
             }
         });
@@ -131,7 +133,8 @@ export default function Login() {
                                     ...user,
                                     email: e.target.value,
                                     published_surveys: '[]',
-                                    invited_surveys: '[]'
+                                    invited_surveys: '[]',
+                                    taken_surveys: '[]'
                                 }));
                             }}
                         />
@@ -149,7 +152,8 @@ export default function Login() {
                                     ...user,
                                     password: e.target.value,
                                     published_surveys: '[]',
-                                    invited_surveys: '[]'
+                                    invited_surveys: '[]',
+                                    taken_surveys: '[]'
                                 }));
                             }}
                         />
