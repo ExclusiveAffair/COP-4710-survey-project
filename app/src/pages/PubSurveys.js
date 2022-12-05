@@ -49,7 +49,7 @@ export default function PublishedSurveys() {
             axios.put(`http://localhost:8888/phpreact/insert.php/${user.email}/editPublished`, senddata);
         });
 
-        // then, remove this survey from each of its participants' invite lists
+        // then, remove this survey from each of its participants' invite lists, and taken lists
         axios.get(`http://localhost:8888/phpreact/insertSurveys.php/${surveyID}`)
         .then((response) => {
             return getParticipantPromises(JSON.parse(response.data.participants));
@@ -62,11 +62,21 @@ export default function PublishedSurveys() {
                     invited_surveyIDs = invited_surveyIDs.filter((id) => (
                         id !== surveyID
                     ));
-                    const senddata = {
+                    var senddata = {
                         email: response.data.email,
                         invited_surveys: JSON.stringify(invited_surveyIDs)
                     }
                     axios.put(`http://localhost:8888/phpreact/insert.php/${response.data.email}/editInvited`, senddata);
+
+                    var taken_surveyIDs = JSON.parse(response.data.taken_surveys);
+                    taken_surveyIDs = taken_surveyIDs.filter((id) => (
+                        id !== surveyID
+                    ));
+                    senddata = {
+                        email: response.data.email,
+                        taken_surveys: JSON.stringify(taken_surveyIDs)
+                    }
+                    axios.put(`http://localhost:8888/phpreact/insert.php/${response.data.email}/editTaken`, senddata);
                 }
             }
         });

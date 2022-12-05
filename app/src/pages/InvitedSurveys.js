@@ -13,19 +13,26 @@ export default function InvitedSurveys() {
     const takeSurvey = (surveyID) => {
         navigate(`/takesurvey/${surveyID}`);
     };
+
+    const taken = (surveyID) => {
+        return JSON.parse(user.taken_surveys).includes(surveyID);
+    }
+
     const SurveyContainer = () => {
         if (user !== null) {
-            const {email, password, published_surveys, invited_surveys} = user;
             return(
                 <>
-                    {JSON.parse(invited_surveys).map((survey) =>(
+                    {JSON.parse(user.invited_surveys).map((survey) =>(
                         <div className='containers'>
                             <div className='surveys'>
                                 <div className='surveyName'>
                                     <p key={survey.title} className='survey'>{survey.title}</p> 
                                 </div>
                                 <div className='takesurvey'>
-                                    <EditIcon onClick={() => takeSurvey(survey.id)}/>
+                                    {
+                                        !taken(survey.id) && 
+                                        <EditIcon onClick={() => takeSurvey(survey.id)}/>
+                                    }
                                 </div>
                             </div> 
                         </div>

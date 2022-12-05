@@ -107,6 +107,18 @@ switch($method) {
             }
             echo json_encode($response);
         }
-        
+        else if (isset($path[4]) && $path[4] == 'editTaken') {
+            $sql = "UPDATE registered_users SET taken_surveys = :taken_surveys WHERE email = :email";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':taken_surveys', $user->taken_surveys);
+            $stmt->bindParam(':email', $user->email);
+    
+            if($stmt->execute()) {
+                $response = ['status' => 1, 'message' => 'Record updated successfully.'];
+            } else {
+                $response = ['status' => 0, 'message' => 'Failed to update record.'];
+            }
+            echo json_encode($response);
+        }
         break;
 }

@@ -39,6 +39,27 @@ export default function TakeSurveyForm() {
 
             return axios.put(`http://localhost:8888/phpreact/insertSurveys.php/${id}/editResponses`, senddata);
         });
+
+        // add this survey to list of taken surveys
+
+        axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
+        .then((response) => {
+            const taken_surveyIDs = JSON.parse(response.data.taken_surveys);
+            taken_surveyIDs.push(parseInt(id));
+            const senddata = {
+                email: user.email,
+                taken_surveys: JSON.stringify(taken_surveyIDs)
+            }
+            return axios.put(`http://localhost:8888/phpreact/insert.php/${user.email}/editTaken`, senddata);
+        });
+
+        setUser(user => ({
+            ...user,
+            taken_surveys: JSON.stringify([
+                ...JSON.parse(user.taken_surveys),
+                parseInt(id)
+            ])
+        }));
         
         navigate('/invitations');
     };

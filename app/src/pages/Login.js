@@ -38,12 +38,12 @@ export default function Login() {
                 // user may be logged in
                 navigate('/home');
 
-                // set existing published and invited surveys
+                // set existing data for published, invited, and taken surveys
                 axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
                 .then((response) => {
                     const published_surveyIDs = JSON.parse(response.data.published_surveys);
                     const invited_surveyIDs = JSON.parse(response.data.invited_surveys);
-
+                    const taken_surveyIDs = JSON.parse(response.data.taken_surveys);
                     getPromise(published_surveyIDs).then((values) => {
                         setUser(user => ({
                             ...user,
@@ -54,6 +54,12 @@ export default function Login() {
                         setUser(user => ({
                             ...user,
                             invited_surveys: JSON.stringify(values.map((val) => (val.data))),
+                        }))
+                    });
+                    getPromise(taken_surveyIDs).then((values) => { 
+                        setUser(user => ({
+                            ...user,
+                            taken_surveys: JSON.stringify(values.map((val) => (val.data.id))),
                         }))
                     });
                 });
@@ -78,8 +84,7 @@ export default function Login() {
             }
             else {
                 // user may be registered
-                axios.post('http://localhost:8888/phpreact/insert.php', senddata)
-                .then((response) => console.log(response));
+                axios.post('http://localhost:8888/phpreact/insert.php', senddata);
                 navigate('/home');
             }
         });
