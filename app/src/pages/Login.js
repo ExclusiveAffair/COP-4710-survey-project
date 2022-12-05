@@ -23,8 +23,7 @@ export default function Login() {
         e.preventDefault();
         axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
         .then((response) => {
-            console.log(response);
-            if (Object.keys(response.data).length === 0) {
+            if (response.data === 'nothing found') {
                 // user is not in the database
                 navigate('/home'); // for testing purposes only
             }
@@ -43,8 +42,6 @@ export default function Login() {
                     const invited_surveyIDs = JSON.parse(response.data.invited_surveys);
 
                     getPromise(published_surveyIDs).then((values) => {
-                        console.log("got published values"); 
-                        console.log(values);
                         setUser(user => ({
                             ...user,
                             published_surveys: JSON.stringify(values.map((val) => (val.data)))
@@ -69,21 +66,14 @@ export default function Login() {
             published_surveys: user.published_surveys,
             invited_surveys: user.invited_surveys
         };
-        console.log(senddata);
         axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
         .then((response) => {
-            console.log(response);
-            if (Object.keys(response.data).length !== 0) {
+            if (response.data !== 'nothing found') {
                 // user with this email already exists
-                console.log("noo we already exist");
             }
             else {
                 // user may be registered
-                console.log("we good to register");
-                axios.post('http://localhost:8888/phpreact/insert.php', senddata)
-                .then((response) => {
-                    console.log(response);
-                });
+                axios.post('http://localhost:8888/phpreact/insert.php', senddata);
                 navigate('/home'); // this is expected behavior
             }
         });
