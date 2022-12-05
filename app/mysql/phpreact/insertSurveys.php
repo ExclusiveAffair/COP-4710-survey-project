@@ -67,10 +67,10 @@ switch($method) {
         $stmt->bindParam(':title', $user->title);
         $stmt->bindParam(':description', $user->description);
         $stmt->bindParam(':participants', $user->participants);
-        $stmt->bindParam(':startDate', $user->startDateString);
-        $stmt->bindParam(':endDate', $user->endDateString);
-        $stmt->bindParam(':questions', $user->questionString);
-        $stmt->bindParam(':responses', $user->responseString);
+        $stmt->bindParam(':startDate', $user->startDate);
+        $stmt->bindParam(':endDate', $user->endDate);
+        $stmt->bindParam(':questions', $user->questions);
+        $stmt->bindParam(':responses', $user->responses);
 
         if ($stmt->execute()) {
             echo json_encode([
@@ -104,5 +104,25 @@ switch($method) {
             echo json_encode($response);
         }
         
+        break;
+
+    case "DELETE":
+        $sql = "DELETE FROM created_surveys";
+        $path = explode('/', $_SERVER['REQUEST_URI']);
+        if(isset($path[3])) {
+            $sql .= " WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $path[3]);
+        } else {
+            $stmt = $conn->prepare($sql);
+        }
+
+        if($stmt->execute()) {
+            $response = ['status' => 1, 'message' => 'Record deleted successfully.'];
+        } else {
+            $response = ['status' => 0, 'message' => 'Failed to delete record.'];
+        }
+
+        echo json_encode($response);
         break;
 }

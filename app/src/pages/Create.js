@@ -19,16 +19,30 @@ const Create = () => {
         e.preventDefault();
 
         const {email, password, published_surveys, invited_surveys} = user;
+
+        var participantsArray = participants.split(",");
+        participantsArray = participantsArray.map(participant => {
+            return participant.trim();
+        });
+
         const startDateString = startDate.toUTCString();
         const endDateString = endDate.toUTCString();
         const questionString = JSON.stringify(questions);
         const responseString = JSON.stringify([]);
+        const participantsString = JSON.stringify(participantsArray);
 
-        var survey = { title, description, participants, startDateString, endDateString, questionString, responseString };
+        var survey = { 
+            title: title,
+            description: description,
+            participants: participantsString,
+            startDate: startDateString,
+            endDate: endDateString,
+            questions: questionString,
+            responses: responseString
+        };
 
         // add survey to survey database.
         const surveyID = await axios.post('http://localhost:8888/phpreact/insertSurveys.php', survey).then((response) => response.data.id);
-        console.log(surveyID);
         survey = {
             id: surveyID,
             ...survey
@@ -36,7 +50,6 @@ const Create = () => {
 
         axios.get(`http://localhost:8888/phpreact/insert.php/${email}`)
         .then((response) => {
-            console.log(surveyID);
             const published_surveyIDs = JSON.parse(response.data.published_surveys);
             published_surveyIDs.push(surveyID);
 
@@ -55,31 +68,19 @@ const Create = () => {
         });
 
         // send the survey to the list of invitees.
-        const participantsArray = participants.split(",");
         participantsArray.forEach((participant) => {
-            participant = participant.trim();
             axios.get(`http://localhost:8888/phpreact/insert.php/${participant}`)
             .then((response) => {
-                if (Object.keys(response.data).length !== 0) {
-                    // this user exists. give him the survey
+                // this user exists. invite them to take the survey
+                if (response.data !== 'nothing found') {
                     const invited_surveyIDs = JSON.parse(response.data.invited_surveys);
                     invited_surveyIDs.push(surveyID);
-                    setUser(user => ({
-                        ...user,
-                        invited_surveys: JSON.stringify([
-                            ...JSON.parse(invited_surveys),
-                            survey
-                        ])
-                    }));
                     const senddata = {
                         email: participant,
                         invited_surveys: JSON.stringify(invited_surveyIDs)
                     }
                     return axios.put(`http://localhost:8888/phpreact/insert.php/${participant}/editInvited`, senddata);
                 }
-            })
-            .then((response) => {
-                console.log(response);
             });
         });
 
@@ -91,7 +92,6 @@ const Create = () => {
             type: "likert",
             contents: ""
         }]);
-        console.log(questions);
     };
     const updateQuestionType = (questionID, newValue) => {
         setQuestions(questions =>
@@ -102,7 +102,6 @@ const Create = () => {
                 return question;
             }),
         );
-        console.log(questions);
     };
     const updateQuestionContents = (questionID, newValue) => {
         setQuestions(questions =>
@@ -113,7 +112,6 @@ const Create = () => {
                 return question;
             }),
         );
-        console.log(questions);
     };
     return (
         <div className="create">

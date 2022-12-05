@@ -62,6 +62,15 @@ const SurveyReport = () => {
         pdf.save(`Survey${id}Report.pdf`);
     };
 
+    const shuffleArray = (array) => {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
     return (
         <Container fluid className='surveyreportcontainer' ref={printRef}>
             <div className='reportHeader'>
@@ -94,6 +103,7 @@ const SurveyReport = () => {
                             </div>
                         }
                         <br />
+                        { shuffleArray(responseData) }
                     </div>
                 ))}
                 <span className='footer'>

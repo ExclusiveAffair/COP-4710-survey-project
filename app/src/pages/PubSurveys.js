@@ -6,6 +6,7 @@ import '../StyleSheet/PubSurveys.css'
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../components/UserContext';
 import ContentPasteSearchOutlinedIcon from '@mui/icons-material/ContentPasteSearchOutlined';
+import axios from 'axios';
 
 const MAX_TITLE_LEN = 30;
 export default function PublishedSurveys() {
@@ -16,6 +17,74 @@ export default function PublishedSurveys() {
         navigate(`/surveyreport/${surveyID}`);
     };
 
+    const getParticipantPromises = (participants) => {
+        const promises = [];
+        participants.forEach((participant) => {
+            promises.push(axios.get(`http://localhost:8888/phpreact/insert.php/${participant}`));
+        });
+        return Promise.all(promises);
+    }
+
+    const deleteSurvey = (surveyID) => {
+        // first, remove this survey from the creator's publish list
+        axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
+        .then((response) => {
+            var published_surveyIDs = JSON.parse(response.data.published_surveys);
+            published_surveyIDs = published_surveyIDs.filter((id) => (
+                id !== surveyID
+            ));
+
+            setUser(user => ({
+                ...user,
+                published_surveys: JSON.stringify(
+                    JSON.parse(user.published_surveys).filter((survey) => (
+                        survey.id !== surveyID
+                    ))
+                )
+            }));
+            const senddata = {
+                email: user.email,
+                published_surveys: JSON.stringify(published_surveyIDs)
+            }
+            axios.put(`http://localhost:8888/phpreact/insert.php/${user.email}/editPublished`, senddata);
+        });
+
+        // then, remove this survey from each of its participants' invite lists, and taken lists
+        axios.get(`http://localhost:8888/phpreact/insertSurveys.php/${surveyID}`)
+        .then((response) => {
+            return getParticipantPromises(JSON.parse(response.data.participants));
+        })
+        .then((responses) => {
+            for (var i = 0; i < responses.length; i++) {
+                const response = responses[i];
+                if (response.data !== 'nothing found') {
+                    var invited_surveyIDs = JSON.parse(response.data.invited_surveys);
+                    invited_surveyIDs = invited_surveyIDs.filter((id) => (
+                        id !== surveyID
+                    ));
+                    var senddata = {
+                        email: response.data.email,
+                        invited_surveys: JSON.stringify(invited_surveyIDs)
+                    }
+                    axios.put(`http://localhost:8888/phpreact/insert.php/${response.data.email}/editInvited`, senddata);
+
+                    var taken_surveyIDs = JSON.parse(response.data.taken_surveys);
+                    taken_surveyIDs = taken_surveyIDs.filter((id) => (
+                        id !== surveyID
+                    ));
+                    senddata = {
+                        email: response.data.email,
+                        taken_surveys: JSON.stringify(taken_surveyIDs)
+                    }
+                    axios.put(`http://localhost:8888/phpreact/insert.php/${response.data.email}/editTaken`, senddata);
+                }
+            }
+        });
+
+        // then, delete the survey itself
+        axios.delete(`http://localhost:8888/phpreact/insertSurveys.php/${surveyID}`);
+    };
+
     const shortFormat = (str) => {
         if (str.length > MAX_TITLE_LEN) return str.slice(0, MAX_TITLE_LEN) + "...";
         return str;
@@ -23,10 +92,9 @@ export default function PublishedSurveys() {
 
     const SurveyContainer = () => {
         if (user !== null) {
-            const {email, password, published_surveys, invited_surveys} = user;
             return(
                 <>
-                    {JSON.parse(published_surveys).map((survey) =>(
+                    {JSON.parse(user.published_surveys).map((survey) =>(
                         <div className='containers'>
                             <div className='surveys'>
                                 <div className='surveyName'>
@@ -37,7 +105,7 @@ export default function PublishedSurveys() {
                                         <ContentPasteSearchOutlinedIcon onClick={() => displaySurveyReport(survey.id)} />
                                     </div>
                                     <div className='deletesurvey'>
-                                        <CloseIcon />
+                                        <CloseIcon onClick={() => deleteSurvey(survey.id)} />
                                     </div>
                                 </div>
                             </div>
