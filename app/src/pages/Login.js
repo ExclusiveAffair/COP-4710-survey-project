@@ -12,7 +12,8 @@ import Modal from 'react-bootstrap/Modal';
 export default function Login() {
     const {user, setUser} = useContext(UserContext);
     const navigate = useNavigate();
-    const [showDialog, setShowDialog] = useState(false);
+    const [showLoginFailedDialog, setShowLoginFailedDialog] = useState(false);
+    const [showRegistrationFailedDialog, setShowRegistrationFailedDialog] = useState(false);
 
     const getPromise = (surveyIDs) => {
         const promises = [];
@@ -27,20 +28,15 @@ export default function Login() {
         .then((response) => {
             if (response.data === 'nothing found') {
                 // user is not in the database
-                console.log(showDialog);
-                console.log("should be displaying the thing");
-                setShowDialog(true);
-                // navigate('/home'); // for testing purposes only
+                setShowLoginFailedDialog(true);
             }
             else if (user.password !== response.data.password) {
                 // user is in the database but the password is wrong
-                // navigate('/home'); // for testing purposes only
-                console.log("should be displaying the thing2");
-                setShowDialog(true);
+                setShowLoginFailedDialog(true);
             }
             else {
                 // user may be logged in
-                navigate('/home'); // this is expected behavior
+                navigate('/home');
 
                 // set existing published and invited surveys
                 axios.get(`http://localhost:8888/phpreact/insert.php/${user.email}`)
@@ -77,27 +73,26 @@ export default function Login() {
         .then((response) => {
             if (response.data !== 'nothing found') {
                 // user with this email already exists
+                setShowRegistrationFailedDialog(true);
             }
             else {
                 // user may be registered
                 axios.post('http://localhost:8888/phpreact/insert.php', senddata);
-                navigate('/home'); // this is expected behavior
+                navigate('/home');
             }
         });
     }
 
-    const Dialog = ({ header, contents }) => {
-        const handleClose = () => setShowDialog(false);
-      
+    const Dialog = ({ show, onClose, header, contents }) => {      
         return (
           <>
-            <Modal show={showDialog} onHide={() => setShowDialog(false)}>
+            <Modal show={show} onHide={onClose}>
               <Modal.Header closeButton>
                 <Modal.Title>{header}</Modal.Title>
               </Modal.Header>
               <Modal.Body>{contents}</Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" onClick={() => setShowDialog(false)}>
+                <Button variant="primary" onClick={onClose}>
                   Close
                 </Button>
               </Modal.Footer>
@@ -108,7 +103,18 @@ export default function Login() {
 
     return (
         <div className="parent">
-            <Dialog header="Login failed" contents="Whoops! You have entered an invalid username or password." />
+            <Dialog
+                show={showLoginFailedDialog}
+                onClose={ () => setShowLoginFailedDialog(false) }
+                header="Login failed"
+                contents="Whoops! You have entered an invalid username or password."
+            />
+            <Dialog
+                show={showRegistrationFailedDialog}
+                onClose={ () => setShowRegistrationFailedDialog(false) }
+                header="Registration failed"
+                contents="Whoops! A user with that email address already exists."
+            />
             <Container className="child">
                 <h1 className="text-center">Login</h1>
                 <Form>
