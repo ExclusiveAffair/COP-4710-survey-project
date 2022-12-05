@@ -18,6 +18,24 @@ export default function InvitedSurveys() {
         return JSON.parse(user.taken_surveys).includes(surveyID);
     }
 
+    const dateInRange = (start, end) => {
+        const enddate = new Date(end);
+        const startdate = new Date(start);
+        const now = new Date();
+
+        enddate.setUTCHours(24);
+        enddate.setUTCMinutes(0);
+        enddate.setUTCSeconds(0);
+        enddate.setUTCMilliseconds(0);
+
+        startdate.setUTCHours(0);
+        startdate.setUTCMinutes(0);
+        startdate.setUTCSeconds(0);
+        startdate.setUTCMilliseconds(0);
+
+        return Date.parse(enddate) - Date.parse(now) >= 0 && Date.parse(now) - Date.parse(startdate) >= 0;
+    }
+
     const SurveyContainer = () => {
         if (user !== null) {
             return(
@@ -30,7 +48,8 @@ export default function InvitedSurveys() {
                                 </div>
                                 <div className='takesurvey'>
                                     {
-                                        !taken(survey.id) && 
+                                        !taken(survey.id) &&
+                                        dateInRange(survey.startDate, survey.endDate) &&
                                         <EditIcon onClick={() => takeSurvey(survey.id)}/>
                                     }
                                 </div>
