@@ -4,6 +4,7 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import '../StyleSheet/InvitedSurveys.css'
 import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from '../components/UserContext';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function InvitedSurveys() {
     const navigate = useNavigate();
@@ -24,8 +25,7 @@ export default function InvitedSurveys() {
                                     <p key={survey.title} className='survey'>{survey.title}</p> 
                                 </div>
                                 <div className='takesurvey'>
-                                    <p onClick={() => takeSurvey(survey.id)}>Take survey</p>
-                                    <ArrowRightAltIcon/>
+                                    <EditIcon onClick={() => takeSurvey(survey.id)}/>
                                 </div>
                             </div> 
                         </div>

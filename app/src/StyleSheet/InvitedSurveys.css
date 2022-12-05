@@ -18,8 +18,12 @@
     font-size: 1.2rem;
 }
 
-.takesurvey{
+.takeSurvey {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 20%
 }
 
 .takesurvey:hover{
