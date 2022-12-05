@@ -21,3 +21,14 @@
 .container {
     width: 25vw !important;
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+}
+
+button {
+    width: 50%;
+}

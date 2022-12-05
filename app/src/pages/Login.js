@@ -130,20 +130,22 @@ export default function Login() {
                             }}
                         />
                     </FloatingLabel>
-                    <Button
-                        type="submit"
-                        onClick={handleLogin}
-                        style={{ marginTop: "1em" }}
-                    >
-                        Log in
-                    </Button>
-                    <Button
-                        type="submit"
-                        onClick={handleRegister}
-                        style={{ marginTop: "1em" }}
-                    >
-                        Register
-                    </Button>
+                    <div class="flex-container">
+                        <Button
+                            type="submit"
+                            onClick={handleLogin}
+                            style={{ marginTop: "1em" }}
+                        >
+                            Log in
+                        </Button>
+                        <Button
+                            type="submit"
+                            onClick={handleRegister}
+                            style={{ marginTop: "1em" }}
+                        >
+                            Register
+                        </Button>
+                    </div>
                 </Form>
             </Container>
         </div>
