@@ -50,7 +50,8 @@ switch($method) {
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        echo json_encode($users);
+        if (!$users) echo "nothing found";
+        else echo json_encode($users);
         break;
 
     case 'POST':
