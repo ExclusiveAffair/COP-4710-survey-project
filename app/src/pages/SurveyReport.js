@@ -79,9 +79,11 @@ const SurveyReport = () => {
                 <p className='subHeading'><i>{surveyStartDate.toDateString()} - {surveyEndDate.toDateString()}</i></p>
                 <p className='subHeading'>You have received {respondents} responses. Here's a breakdown by question:</p>
             </div>
+            <br/>
             <div className="showsurveyreport">
                 {JSON.parse(activeSurvey.questions).map((question) => (
                     <div className='questionreport'>
+                        { shuffleArray(responseData) }
                         <p className='questionnumber'><b>Question {question.id + 1}. {question.contents}</b></p>
                         {question.type === 'likert' &&
                             <div className='likert'>
@@ -91,7 +93,7 @@ const SurveyReport = () => {
                             </div>
                         }
                         {question.type === 'shortanswer' &&
-                            <div className='likert'>
+                            <div className='shortanswer'>
                                 <p className='questiontype'>Format: Short answer</p>
                                 <div className='responselist'>
                                     {responseData.map((response, rid) => (
@@ -103,7 +105,6 @@ const SurveyReport = () => {
                             </div>
                         }
                         <br />
-                        { shuffleArray(responseData) }
                     </div>
                 ))}
                 <span className='footer'>

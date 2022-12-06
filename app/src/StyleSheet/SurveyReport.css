@@ -5,4 +5,20 @@
 }
 .showsurveyreport {
     text-align: center;
+    width: 100%;
+}
+.questionreport {
+    text-align: left;
+}
+.questionreport {
+    margin-left: 250px;
+}
+.likert {
+    margin-left: 50px;
+}
+.shortanswer {
+    margin-left: 50px;
+}
+.footer {
+    text-align: center;
 }
